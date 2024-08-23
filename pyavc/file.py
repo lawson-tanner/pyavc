@@ -1,24 +1,24 @@
 import struct, os, time, uuid, binascii
 from utils import reverse_str, encode_u8, encode_u16le, encode_u32le, encode_u64le, encode_u32be, encode_str, conform_byte_string, generate_truncated_uuidv7, extra_padding, count_carriage_returns, swap_lf_cr, calculate_and_insert_counts
 from datetime import datetime
-from bytestrings import footer1, footer2
+from bytestrings import footer1, footer2, placeholder, identifier1, identifier2, identifier3, creator_description_len_marker
 
 class AVCHeader:
     def __init__(self, uuid):
         self.byte_order_indicator = b'\x06\x00' # Write directly to file
         self.magic = 'Domain'
         self.fourcc1 = 'OBJD'
-        self.identifier1 = b'\x00\x07' # Big
+        self.identifier1 = identifier1
         self.objdoc = 'AObjDoc'
-        self.identifier2 = b'\x00\x13\x04' # Big
+        self.identifier2 = identifier2
         self.timestamp_str = datetime.now().strftime(u'%Y/%m/%d %H:%M:%S')
-        self.identifier3 = b'\x00\x00\x00\x02\x00\x00\x00\x02' # Big
+        self.identifier3 = identifier3
         self.iiii = b'IIII'
         self.uuid = uuid
         self.fourcc2 = u'ATsc'
-        self.fourcc3 = u'ATve' # Big
+        self.fourcc3 = u'ATve' 
         
-        self.creator_description_len_marker = b'\x00\x1E' # Big
+        self.creator_description_len_marker = creator_description_len_marker
         self.creator_description = "pyavc v1.1"
     
     def create(self):
@@ -98,7 +98,7 @@ class BTXTChunk:
         
         # NUM CHAR A Placeholder
         num_char_a_idx = len(data)  # Save index to update later
-        data += b'\x00\x00\x00\x00'  # Placeholder for num_char A
+        data += placeholder  # Placeholder for num_char A
         
         # Start of NUM CHAR A
         num_char_a_start = len(data)
@@ -109,7 +109,7 @@ class BTXTChunk:
         
         # NUM CHAR D Placeholder
         num_char_d_idx = len(data)  # Save index to update later
-        data += b'\x00\x00\x00\x00'  # Placeholder for num_char D
+        data += placeholder  # Placeholder for num_char D
         
         # Start of NUM CHAR D
         num_char_d_start = len(data)
@@ -161,7 +161,7 @@ class BTXTChunk:
         
         # NUM CHAR C Placeholder
         num_char_c_idx = len(data)  # Save index to update later
-        data += b'\x00\x00\x00\x00'  # Placeholder for num_char C
+        data += placeholder  # Placeholder for num_char C
         
         # Start of NUM CHAR C
         num_char_c_start = len(data)
