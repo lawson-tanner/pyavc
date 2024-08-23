@@ -1,6 +1,7 @@
 import struct, os, time, uuid, binascii
 from utils import reverse_str, encode_u8, encode_u16le, encode_u32le, encode_u64le, encode_u32be, encode_str, conform_byte_string, generate_truncated_uuidv7, extra_padding, count_carriage_returns, swap_lf_cr, calculate_and_insert_counts
 from datetime import datetime
+from bytestrings import footer1, footer2
 
 class AVCHeader:
     def __init__(self, uuid):
@@ -84,9 +85,9 @@ class BTXTChunk:
         self.num_lines = 0
         self.num_newlines = 0
         self.uuid = uuid
-        self.footer1 = b'\x00\x00\x00\x00\x00\x00\x00\x00\x0A\x02\x05\x7A\x05\x9A\x00\x15\x00\x01'
-        self.footer2 = b'\x03\x32\x20\x67\x6C\x44\x20\x6C\x6C\x65\x68\x53\x20\x53\x4D\x00\x0E\x4C\x06\x01\x01\x42\x01\x42\x00\x42\x01\x42\x05\x01\x01\x42\x04\x01\x00\x00\x02\x00\x47\x03\x01\x00\x42\x02\x01\x00\x42\x01\x01\x00\x00\x00\x28\x01\x00\x01'
-
+        self.footer1 = footer1
+        self.footer2 = footer2
+
         
     def create(self):
         data = bytearray()
