@@ -133,29 +133,6 @@ def encode_str(value):
     """
     return value.encode('utf-8')
 
-def encode_u8(value):
-    """
-    Encode an integer as an unsigned 8-bit value.
-
-    Args:
-        value (int): The integer to encode.
-
-    Returns:
-        bytes: The 8-bit encoded integer.
-    """
-    return struct.pack("B", value)
-
-def encode_u16le(value):
-    """
-    Encode an integer as a little-endian unsigned 16-bit value.
-
-    Args:
-        value (int): The integer to encode.
-
-    Returns:
-        bytes: The 16-bit encoded integer.
-    """
-    return struct.pack("<H", value)
 
 def encode_u32le(value):
     """
