@@ -1,7 +1,7 @@
 import struct, os, time, uuid, binascii
 from utils import reverse_str, encode_u8, encode_u16le, encode_u32le, encode_u64le, encode_u32be, encode_str, conform_byte_string, generate_truncated_uuidv7, extra_padding, count_carriage_returns, swap_lf_cr, calculate_and_insert_counts
 from datetime import datetime
-from bytestrings import footer1, footer2, placeholder, identifier1, identifier2, identifier3, creator_description_len_marker
+from bytestrings import footer1, footer2, placeholder, identifier1, identifier2, identifier3, creator_description_len_marker, bs1, bs2, bs3
 
 class AVCHeader:
     def __init__(self, uuid):
@@ -79,8 +79,7 @@ class AVCHeader:
 class BTXTChunk:
     def __init__(self, uuid, txt_lines):
         self.txt_lines = txt_lines
-        self.class_id = u'BTXT'
-        # Num_char starts counting after the 3 byte filler and stops counting from the last character before Scpt chunk
+        self.class_id = u'BTXT'
         self.num_char = 0
         self.num_lines = 0
         self.num_newlines = 0
@@ -93,29 +92,33 @@ class BTXTChunk:
         data = bytearray()
         formatted_lines = []
         
-        # Reverse and add the FOURCC code (assuming self.class_id is 'TXTB')
+        # Reverse and add the FOURCC code 
         data += reverse_str(self.class_id)  # Adds 'BXTT' in bytes
         
-        # NUM CHAR A Placeholder
+        # NUM CHAR A Index
         num_char_a_idx = len(data)  # Save index to update later
-        data += placeholder  # Placeholder for num_char A
+
+        # NUM CHAR A Placeholder
+        data += placeholder  
         
-        # Start of NUM CHAR A
+        # Start count of NUM CHAR A
         num_char_a_start = len(data)
-        print(f"NUM CHAR A starts at: {num_char_a_start}")
         
-        # Add b'\x02\x01' in big-endian format
-        data += b'\x02\x01'
         
-        # NUM CHAR D Placeholder
+        # Add bs1
+        data += bs1
+        
+        # NUM CHAR D Index
         num_char_d_idx = len(data)  # Save index to update later
-        data += placeholder  # Placeholder for num_char D
+
+        # NUM CHAR D Placeholder
+        data += placeholder
         
-        # Start of NUM CHAR D
+        # Start count of NUM CHAR D
         num_char_d_start = len(data)
-        print(f"NUM CHAR D starts at: {num_char_d_start}")
         
-        # Count the number of characters (num_char) and insert text content
+        
+        # Count the number of characters and insert text content
         for line in self.txt_lines:
             stripped_line = line.rstrip('\n').rstrip('\r')
             swapped = swap_lf_cr(stripped_line)
@@ -125,7 +128,7 @@ class BTXTChunk:
             data += encoded_line
         
         
-        # End of NUM CHAR D
+        # Stop count of NUM CHAR D
         num_char_d_end = len(data)
         data[num_char_d_idx:num_char_d_idx+4] = encode_u32le(len(data) - num_char_d_start)
         
@@ -136,7 +139,7 @@ class BTXTChunk:
         # Padding \x00 * 4
         data += conform_byte_string(encoded_num_newlines, 4)
         
-        # NUM CHAR B (Recursive) Count (Running Total)
+        # Start count of NUM CHAR B (Recursive)
         running_total = 0
         for line in self.txt_lines:
             line_num_char = len(line)
@@ -144,32 +147,30 @@ class BTXTChunk:
             encoded = encode_u32be(running_total)
             data += conform_byte_string(encoded, 0)
         
-        # NUM CHAR B END COUNT
+        # Stop count of NUM CHAR B (Recursive)
         num_char_b_recursive_end = len(data)
-        print(f"NUM CHAR B (Recursive) ends at: {num_char_b_recursive_end}")
         
-        # Add remaining sequence
-        data += conform_byte_string(b'\x03\x00\x00\x00\x03\x47\x01\x01', 0)
         
-        # NUM CHAR A END COUNT (before scpt)
+        # Add bs2
+        data += conform_byte_string(bs2, 0)
+        
+        # Stop count of NUM CHAR A 
         num_char_a_end = len(data)
-        data[num_char_a_idx:num_char_a_idx+4] = encode_u32le(len(data) - num_char_a_start)
-        print(f"Final total for NUM CHAR A: {len(data) - num_char_a_start}")
+        data[num_char_a_idx:num_char_a_idx+4] = encode_u32le(len(data) - num_char_a_start)
         
-        # Now add 'Scpt'
+        # Add 'Scpt' string
         data += reverse_str('Scpt')
         
         # NUM CHAR C Placeholder
         num_char_c_idx = len(data)  # Save index to update later
-        data += placeholder  # Placeholder for num_char C
+        data += placeholder
         
-        # Start of NUM CHAR C
+        # Start count of NUM CHAR C
         num_char_c_start = len(data)
-        print(f"NUM CHAR C starts at: {num_char_c_start}")
         
-        # Adding the relevant sequence including the counting field
-        bytes_to_add = b'\x02\x03\x01\x00\x00\x00\x01\x00\x0C\x00\x00\x00'
-        data += bytes_to_add
+        
+        # Add bs3
+        data += bs3
         
         # Add footer1
         footer1_to_add = conform_byte_string(self.footer1, 0)
@@ -187,7 +188,7 @@ class BTXTChunk:
         
         # End of NUM CHAR C
         num_char_c_end = len(data)
-        print(f"NUM CHAR C ends at: {num_char_c_end}")
+        
         
         # Calculate and insert counts using the helper function
         calculate_and_insert_counts(data, num_char_a_start, num_char_a_end, num_char_a_idx)
