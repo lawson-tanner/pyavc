@@ -1,11 +1,11 @@
 import struct, os, time, uuid, binascii
 from utils import reverse_str, encode_u8, encode_u16le, encode_u32le, encode_u64le, encode_u32be, encode_str, conform_byte_string, generate_truncated_uuidv7, extra_padding, count_carriage_returns, swap_lf_cr, calculate_and_insert_counts
 from datetime import datetime
-from bytestrings import footer1, footer2, placeholder, identifier1, identifier2, identifier3, creator_description_len_marker, bs1, bs2, bs3
+from bytestrings import footer1, footer2, placeholder, byte_order_indicator, identifier1, identifier2, identifier3, creator_description_len_marker, bs1, bs2, bs3, bs4
 
 class AVCHeader:
     def __init__(self, uuid):
-        self.byte_order_indicator = b'\x06\x00' # Write directly to file
+        self.byte_order_indicator = byte_order_indicator
         self.magic = 'Domain'
         self.fourcc1 = 'OBJD'
         self.identifier1 = identifier1
@@ -103,8 +103,7 @@ class BTXTChunk:
         
         # Start count of NUM CHAR A
         num_char_a_start = len(data)
-        
-        
+        
         # Add bs1
         data += bs1
         
@@ -134,9 +133,7 @@ class BTXTChunk:
         
         # Insert num newline chars in text content
         self.num_newlines = count_carriage_returns(formatted_lines)
-        encoded_num_newlines = encode_u32be(self.num_newlines)
-        
-        # Padding \x00 * 4
+        encoded_num_newlines = encode_u32be(self.num_newlines)
         data += conform_byte_string(encoded_num_newlines, 4)
         
         # Start count of NUM CHAR B (Recursive)
@@ -145,14 +142,14 @@ class BTXTChunk:
             line_num_char = len(line)
             running_total += line_num_char
             encoded = encode_u32be(running_total)
-            data += conform_byte_string(encoded, 0)
+            data += conform_byte_string(encoded)
         
         # Stop count of NUM CHAR B (Recursive)
         num_char_b_recursive_end = len(data)
         
         
         # Add bs2
-        data += conform_byte_string(bs2, 0)
+        data += conform_byte_string(bs2)
         
         # Stop count of NUM CHAR A 
         num_char_a_end = len(data)
@@ -161,27 +158,28 @@ class BTXTChunk:
         # Add 'Scpt' string
         data += reverse_str('Scpt')
         
+        # NUM CHAR C Index
+        num_char_c_idx = len(data)
+
         # NUM CHAR C Placeholder
-        num_char_c_idx = len(data)  # Save index to update later
         data += placeholder
         
         # Start count of NUM CHAR C
         num_char_c_start = len(data)
-        
-        
+        
         # Add bs3
-        data += bs3
+        data += conform_byte_string(bs3)
         
         # Add footer1
-        data += conform_byte_string(footer1, 0)
+        data += conform_byte_string(footer1)
         
-        # Add padding and finalize the remaining part
-        data += conform_byte_string(b'\x06', 5)
+        # Add bs4 and 5 padding characters
+        data += conform_byte_string(bs4, 5)
         
         # Add UUID
         data += conform_byte_string(self.uuid, 8)
         # Add footer2
-        data += conform_byte_string(footer2, 0)
+        data += conform_byte_string(footer2)
         
         # End count of NUM CHAR C
         num_char_c_end = len(data)
