@@ -1,6 +1,8 @@
 # pyavc
 
-`pyavc` is a Python library that allows you to convert DOCX or TXT files into a specific output format. It can be used both as a command-line tool and as a library within your Python scripts.
+`pyavc` is a Python library that allows you to convert DOCX or TXT files into Avid Script (.avc) files. It can be used both as a command-line tool and as a library within your Python scripts.
+
+This project is not affiliated with Avid or Avid Media Composer, it is simply an open source helper library to make fellow AEs' lives a bit easier.
 
 ## Installation
 
@@ -31,7 +33,7 @@ convert(filepath: os.Path, output_dir: os.Path, output_name=None)
 #### Example Usage
 
 ```python
-import avc
+import pyavc as avc
 
 # Convert a TXT file and save the output
 avc.convert('/path/to/input.txt', '/path/to/output/dir')
@@ -76,4 +78,4 @@ Contributions are welcome! Please open an issue or submit a pull request with an
 
 ## Acknowledgments
 
-Special thanks to all contributors and users of `pyavc`.
+`pyavc` would not be possible without the `pyavb` [library by mjiggidy](https://github.com/mjiggidy/pyavb), itself a fork of the `pyavb` [library by markreidvfx](https://github.com/markreidvfx/pyavb), which provided so many useful hints - as it turns out, AVC files are constructed much like AVB files. Who would have thought?
