@@ -188,7 +188,7 @@ def encode_u64le(value):
 
 def encode_u32be(value):
     """
-    Encode an integer as a little-endian unsigned 32-bit value.
+    Encode an integer as a big-endian unsigned 32-bit value.
 
     Args:
         value (int): The integer to encode.
