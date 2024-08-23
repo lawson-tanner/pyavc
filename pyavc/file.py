@@ -173,20 +173,17 @@ class BTXTChunk:
         data += bs3
         
         # Add footer1
-        footer1_to_add = conform_byte_string(self.footer1, 0)
-        data += footer1_to_add
+        data += conform_byte_string(footer1, 0)
         
         # Add padding and finalize the remaining part
         data += conform_byte_string(b'\x06', 5)
         
-        # Add UUID and footers
-        uuid_to_add = conform_byte_string(self.uuid, 8)
-        data += uuid_to_add
+        # Add UUID
+        data += conform_byte_string(self.uuid, 8)
+        # Add footer2
+        data += conform_byte_string(footer2, 0)
         
-        footer2_to_add = conform_byte_string(self.footer2, 0)
-        data += footer2_to_add
-        
-        # End of NUM CHAR C
+        # End count of NUM CHAR C
         num_char_c_end = len(data)
         
         
