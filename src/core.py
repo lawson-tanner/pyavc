@@ -8,7 +8,7 @@ def convert(filepath: os.Path, output_dir: os.Path, output_name=None):
     elif not os.path.exists(output_dir):
         raise Exception()
     
-    avc = AVCFile(filepath, output_dir)
+    avc = AVCFile(filepath, output_dir, output_name)
     try:
         avc.create()
 
