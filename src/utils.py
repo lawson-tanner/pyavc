@@ -1,4 +1,4 @@
-import struct, time, datetime, uuid
+import struct, time, uuid
 
 
 def generate_truncated_uuidv7():

@@ -15,8 +15,14 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    entry_points={
+        'console_scripts': [
+            'pyavc=src.cli:main',  
+        ],
+    },
+    
     python_requires='>=3.12',
     install_requires=[
-        # List of dependencies
+        'python-docx>=0.8.10',
     ],
 )
