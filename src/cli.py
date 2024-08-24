@@ -51,8 +51,8 @@ def validate_paths(filepath, output_dir):
     filepath = ensure_absolute_path(filepath)
     output_dir = ensure_absolute_path(output_dir)
 
-    print(f"Resolved input path: {filepath}")
-    print(f"Resolved output directory: {output_dir}")
+    #print(f"Resolved input path: {filepath}")
+    #print(f"Resolved output directory: {output_dir}")
 
     if not os.path.exists(filepath):
         raise FileNotFoundError(f"The input file '{filepath}' does not exist.")
@@ -70,7 +70,7 @@ def main():
     sys.argv = [replace_smart_quotes(arg) for arg in sys.argv]
     sys.argv = fix_split_arguments(sys.argv)
     
-    print(f"Processed arguments: {sys.argv}")
+    #print(f"Processed arguments: {sys.argv}")
 
     # Create the parser
     parser = argparse.ArgumentParser(description="Process a DOCX or TXT file into the desired output format.")
