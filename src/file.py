@@ -19,7 +19,7 @@ class AVCHeader:
         self.fourcc2 = u'ATsc'
         self.fourcc3 = u'ATve' 
         self.creator_description_len_marker = creator_description_len_marker
-        self.creator_description = "pyavc v1.1"
+        self.creator_description = "pyavc v1.0.1"
     
     def create(self):
         data = bytearray()

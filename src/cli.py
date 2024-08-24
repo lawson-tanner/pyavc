@@ -91,7 +91,7 @@ def main():
         avc_file = AVCFile(input_path, output_dir, output_name)
         output_path = avc_file.create()
         
-        print(f"Successfully processed '{input_path}' to '{output_path}'.")
+        #print(f"Successfully processed '{input_path}' to '{output_path}'.")
 
     except FileNotFoundError as fnf_error:
         print(f"Error: {fnf_error}")
