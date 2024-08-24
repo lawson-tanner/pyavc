@@ -18,8 +18,6 @@ pip3 install pyavc
 
 The main (and only) method provided is `convert`. It allows you to convert a DOCX or TXT file and save the result in a specified output directory.
 
-#### Function Signature
-
 ```python
 convert(filepath, output_dir, output_name=None)
 ```
