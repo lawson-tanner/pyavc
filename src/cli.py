@@ -3,7 +3,7 @@
 import argparse
 import os
 import sys
-from file import AVCFile
+from .file import AVCFile
 
 def main():
     # Create the parser
