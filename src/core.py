@@ -1,4 +1,4 @@
-from file import AVCFile
+from .file import AVCFile
 import os
 
 def convert(filepath: os.Path, output_dir: os.Path, output_name=None):
