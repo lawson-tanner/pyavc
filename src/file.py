@@ -2,7 +2,7 @@ import os
 from .utils import reverse_str, encode_u32le, encode_u64le, encode_u32be, encode_str, conform_byte_string, generate_truncated_uuidv7, extra_padding, count_carriage_returns, swap_lf_cr, calculate_and_insert_counts
 from datetime import datetime
 from .bytestrings import footer1, footer2, placeholder, byte_order_indicator, identifier1, identifier2, identifier3, creator_description_len_marker, bs1, bs2, bs3, bs4
-from docx import convert_docx_to_lines
+from .docx_utils import convert_docx_to_lines
 
 class AVCHeader:
     def __init__(self, uuid):
