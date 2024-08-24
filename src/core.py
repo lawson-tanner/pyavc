@@ -1,7 +1,7 @@
 from .file import AVCFile
 import os
 
-def convert(filepath: os.Path, output_dir: os.Path, output_name=None):
+def convert(filepath, output_dir, output_name=None):
     if not os.path.exists(filepath) or not filepath.lower().endswith('.txt') or not filepath.lower.endswith('.docx'):
         raise Exception()
     	
