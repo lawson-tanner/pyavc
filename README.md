@@ -16,12 +16,12 @@ pip3 install pyavc
 
 ### As a Python Library
 
-The main function exposed to end users is `convert`. This function allows you to convert a DOCX or TXT file and save the result in a specified output directory.
+The main (and only) method provided is `convert`. It allows you to convert a DOCX or TXT file and save the result in a specified output directory.
 
 #### Function Signature
 
 ```python
-convert(filepath: os.Path, output_dir: os.Path, output_name=None)
+convert(filepath, output_dir, output_name=None)
 ```
 
 #### Parameters
@@ -70,12 +70,18 @@ pyavc -i /path/to/input.docx -o /path/to/output/dir -n custom_name
 
 ## License
 
-This project is licensed under the GNU 3.0 License. See the [LICENSE](LICENSE) file for more details.
+This project is licensed under the GPL 3.0 License. See the [LICENSE](LICENSE) file for more details.
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request with any improvements or suggestions.
+Contributions are welcome! Please open an issue or submit a pull request with any improvements or suggestions. I am but a humble assistant editor and programming is more a hobby than a profession, so I'm always open to feedback.
+
+## Some Notes
+
+This library is still in the 'finishing touches' phase, and as always, there may be undiscovered bugs. 
+
+Due to differences in formatting between DOCX and TXT files, if you decide to convert to TXT manually, care needs to be taken to ensure line breaks are added in order for Avid not to read entire paragraphs as single lines. This is an issue which occurs regardless of whether you're using Avid Media Composer or `pyavc`. If in doubt, supply the Word file directly and allow the library to do this for you. However, the Word conversion feature still needs a bunch of testing (as at 08/25/2024). 
 
 ## Acknowledgments
 
-`pyavc` would not be possible without the `pyavb` [library by mjiggidy](https://github.com/mjiggidy/pyavb), itself a fork of the `pyavb` [library by markreidvfx](https://github.com/markreidvfx/pyavb), which provided so many useful hints - as it turns out, AVC files are constructed much like AVB files. Who would have thought?
+`pyavc` would not be possible without the [pyavb library by mjiggidy](https://github.com/mjiggidy/pyavb), itself a fork of the [pyavb library by markreidvfx](https://github.com/markreidvfx/pyavb), which provided so many useful hints - as it turns out, AVC files are constructed much like AVB files. Who would have thought?
