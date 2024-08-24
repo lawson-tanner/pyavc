@@ -65,7 +65,7 @@ def calculate_and_insert_counts(data, start_marker, end_marker, placeholder_idx)
     """
     byte_count = end_marker - start_marker
     data[placeholder_idx:placeholder_idx+4] = encode_u32le(byte_count)
-    print(f"Inserted count {byte_count} at index {placeholder_idx}")
+    
 
 
 

@@ -213,7 +213,8 @@ class AVCFile:
 
         # Step 2: Determine the base name and enforce the 56-character limit
         if self.name is None:
-            base_name = os.path.basename(self.input_file).rstrip(('.txt', '.docx'))
+            # Split the base name and the extension
+            base_name, ext = os.path.splitext(os.path.basename(self.input_file))
         else:
             base_name = self.name
 
@@ -258,6 +259,9 @@ class AVCFile:
         # Write data to file
         with open(self.full_path, 'wb') as avc:
             avc.write(output)
+        
         print(f"AVC file created successfully at {self.full_path}")
+        return self.full_path
+        
  
 
