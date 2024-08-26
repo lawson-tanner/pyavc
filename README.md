@@ -1,7 +1,5 @@
 # pyavc
 
-EDIT (26/08/2024): Currently resolving import issues - please stand by!
-
 `pyavc` is a Python library that allows you to convert DOCX or TXT files into Avid Script (.avc) files. It can be used both as a command-line tool and as a library within your Python scripts.
 
 This project is not affiliated with Avid or Avid Media Composer, it is simply an open source helper library to make fellow AEs' lives a bit easier.
@@ -12,6 +10,14 @@ To install `pyavc`, you can use `pip3`:
 
 ```bash
 pip3 install pyavc
+```
+
+## Import Syntax
+
+Use the following syntax to import the functionality into your Python script:
+
+```python
+from avc.core import convert
 ```
 
 ## Usage
@@ -33,13 +39,13 @@ convert(filepath, output_dir, output_name=None)
 #### Example Usage
 
 ```python
-import pyavc as avc
+from avc.core import convert
 
 # Convert a TXT file and save the output
-avc.convert('/path/to/input.txt', '/path/to/output/dir')
+convert('/path/to/input.txt', '/path/to/output/dir')
 
 # Convert a DOCX file and specify a custom output name
-avc.convert('/path/to/input.docx', '/path/to/output/dir', output_name='custom_name')
+convert('/path/to/input.docx', '/path/to/output/dir', output_name='custom_name')
 ```
 
 ### Command-Line Usage
@@ -80,7 +86,7 @@ Contributions are welcome! Please open an issue or submit a pull request with an
 
 This library is still in the 'finishing touches' phase, and as always, there may be undiscovered bugs. 
 
-Due to differences in formatting between DOCX and TXT files, if you decide to convert to TXT manually, care needs to be taken to ensure line breaks are added in order for Avid not to read entire paragraphs as single lines. This is an issue which occurs regardless of whether you're using Avid Media Composer or `pyavc`. If in doubt, supply the Word file directly and allow the library to do this for you. However, the Word conversion feature still needs a bunch of testing (as at 08/25/2024). 
+Due to differences in formatting between DOCX and TXT files, if you decide to convert to TXT manually, care needs to be taken to ensure line breaks are added in order for Avid not to read entire paragraphs as single lines.  If in doubt, supply the Word file directly and allow the library to do this for you. However, the Word conversion feature still needs a bunch of testing, however it currently appears to work well (as at 08/25/2024). 
 
 ## Acknowledgments
 
