@@ -24,7 +24,7 @@ from avc.core import convert
 
 ### As a Python Library
 
-The main (and only) method provided is `convert`. It allows you to convert a DOCX or TXT file and save the result in a specified output directory.
+The main (and only) method provided is `convert`. It allows you to convert a DOCX or TXT file and save the result to a specified output directory.
 
 ```python
 convert(filepath, output_dir, output_name=None)
@@ -86,7 +86,7 @@ Contributions are welcome! Please open an issue or submit a pull request with an
 
 This library is still in the 'finishing touches' phase, and as always, there may be undiscovered bugs. 
 
-Due to differences in formatting between DOCX and TXT files, if you decide to convert to TXT manually, care needs to be taken to ensure line breaks are added in order for Avid not to read entire paragraphs as single lines.  If in doubt, supply the Word file directly and allow the library to do this for you. However, the Word conversion feature still needs a bunch of testing, however it currently appears to work well (as at 08/25/2024). 
+Due to differences in formatting between DOCX and TXT files, if you decide to convert to TXT manually, care needs to be taken to ensure line breaks are added in order for Avid not to read entire paragraphs as single lines.  If in doubt, supply the Word file directly and allow the library to do this for you. If you encounter any issues with converting from Word files, and you have a couple of minutes to spare, please log an issue. 
 
 ## Acknowledgments
 
