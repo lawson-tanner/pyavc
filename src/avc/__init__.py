@@ -1,5 +1,5 @@
 # src/__init__.py
 
-from .core import convert
+from . import core
 
-__all__ = ['convert']
+__all__ = ['core.convert']
