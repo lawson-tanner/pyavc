@@ -34,7 +34,7 @@ convert(filepath, output_dir, output_name=None)
 
 - **`filepath`** (`os.Path`): The path to the input DOCX or TXT file.
 - **`output_dir`** (`os.Path`): The path to the output directory where the converted file will be saved.
-- **`output_name`** (`str`, optional): The name of the output file (without extension). If not provided, the output file will be named based on the input file name.
+- **`output_name`** (`str`, optional): The name of the output file (without extension). If not provided, the output file will be named based on the input file name. Whether this argument is provided or not, `pyavc` will never overwrite existing files, but will append consecutive numbers to the end of the file name.
 
 #### Example Usage
 
