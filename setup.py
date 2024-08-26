@@ -21,7 +21,7 @@ setup(
         ],
     },
     
-    python_requires='>=3.12',
+    python_requires='>=3.6',
     install_requires=[
         'python-docx>=0.8.10',
     ],
