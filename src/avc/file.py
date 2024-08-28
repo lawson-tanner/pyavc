@@ -19,7 +19,7 @@ class AVCHeader:
         self.fourcc2 = u'ATsc'
         self.fourcc3 = u'ATve' 
         self.creator_description_len_marker = creator_description_len_marker
-        self.creator_description = "pyavc v1.0.1"
+        self.creator_description = "pyavc v1.0.11"
     
     def create(self):
         data = bytearray()
@@ -210,20 +210,23 @@ class AVCFile:
         
         elif self.input_file.lower().endswith('.docx'):
             self.txt_lines = convert_docx_to_lines(self.input_file)
-
+    
         # Step 2: Determine the base name and enforce the 56-character limit
         if self.name is None:
             # Split the base name and the extension
             base_name, ext = os.path.splitext(os.path.basename(self.input_file))
         else:
             base_name = self.name
-
+    
+        # Trim any trailing whitespace from the base name
+        base_name = base_name.rstrip()
+    
         # Ensure the base name doesn't exceed 56 characters
         base_name = base_name[:56] if len(base_name) > 56 else base_name
-
+    
         # Step 3: Construct the initial full path
         full_path = os.path.join(self.output_dir, f"{base_name}.avc")
-
+    
         # Step 4: Check if the file exists and append an incrementing number if necessary
         if os.path.exists(full_path):
             count = 1
@@ -241,10 +244,9 @@ class AVCFile:
                     full_path = new_full_path
                     break  # Exit the loop once a unique name is found
                 count += 1  # Increment the counter and try again
-
+    
         # Step 5: Assign the final path to the instance variable
         self.full_path = full_path
-
 
         
         # Generate header
