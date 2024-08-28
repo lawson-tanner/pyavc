@@ -14,7 +14,8 @@ def convert(filepath, output_dir, output_name=None):
         
     avc = AVCFile(filepath, output_dir, output_name)
     try:
-        avc.create()
+        returned_filepath = avc.create()
+        return returned filepath
 
-    except:
-        print("There was an error!")
+    except Exception as e:
+        print(f"There was an error: {e}")
