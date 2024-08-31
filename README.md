@@ -90,4 +90,4 @@ Due to differences in formatting between DOCX and TXT files, if you decide to co
 
 ## Acknowledgments
 
-`pyavc` would not be possible without the [pyavb library by mjiggidy](https://github.com/mjiggidy/pyavb), itself a fork of the [pyavb library by markreidvfx](https://github.com/markreidvfx/pyavb), which provided so many useful hints - as it turns out, AVC files are constructed much like AVB files. Who would have thought?
+`pyavc` would not be possible without the [pyavb library by markreidvfx](https://github.com/markreidvfx/pyavb), which provided so many useful hints. As it turns out, AVC files are constructed much like AVB files. Who would have thought?
