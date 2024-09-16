@@ -2,7 +2,7 @@ import os
 from .utils import reverse_str, encode_u32le, encode_u64le, encode_u32be, encode_str, conform_byte_string, generate_truncated_uuidv7, extra_padding, count_carriage_returns, swap_lf_cr, calculate_and_insert_counts
 from datetime import datetime
 from .bytestrings import footer1, footer2, placeholder, byte_order_indicator, identifier1, identifier2, identifier3, creator_description_len_marker, bs1, bs2, bs3, bs4
-from .docx_utils import convert_docx_to_lines
+from .docx_utils import convert_docx_to_lines, wrap_text
 
 class AVCHeader:
     def __init__(self, uuid):
@@ -191,12 +191,13 @@ class BTXTChunk:
 
 
 class AVCFile:
-    def __init__(self, input_path, output_dir, output_file_name=None):
+    def __init__(self, input_path, output_dir, output_file_name=None, text_width=80):
         self.name = output_file_name
         self.output_dir = output_dir
         self.full_path = None
         self.input_file = input_path
         self.txt_lines = None
+        self.text_width = text_width
         self.uuid = generate_truncated_uuidv7()
         self.header = None
         self.btxt_chunk = None
@@ -207,9 +208,10 @@ class AVCFile:
             # Read txt file
             with open(self.input_file, 'r') as txt:
                 self.txt_lines = txt.readlines()
+                self.txt_lines = wrap_text(self.txt_lines, self.text_width)
         
         elif self.input_file.lower().endswith('.docx'):
-            self.txt_lines = convert_docx_to_lines(self.input_file)
+            self.txt_lines = convert_docx_to_lines(self.input_file, self.text_width)
     
         # Step 2: Determine the base name and enforce the 56-character limit
         if self.name is None:
