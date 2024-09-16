@@ -1,8 +1,8 @@
 import os
-from .utils import reverse_str, encode_u32le, encode_u64le, encode_u32be, encode_str, conform_byte_string, generate_truncated_uuidv7, extra_padding, count_carriage_returns, swap_lf_cr, calculate_and_insert_counts
+from .utils import reverse_str, encode_u32le, encode_u64le, encode_u32be, encode_str, conform_byte_string, generate_truncated_uuidv7, extra_padding, count_carriage_returns, swap_lf_cr, calculate_and_insert_counts, wrap_txt_file_line
 from datetime import datetime
 from .bytestrings import footer1, footer2, placeholder, byte_order_indicator, identifier1, identifier2, identifier3, creator_description_len_marker, bs1, bs2, bs3, bs4
-from .docx_utils import convert_docx_to_lines, wrap_text
+from .docx_utils import convert_docx_to_lines
 
 class AVCHeader:
     def __init__(self, uuid):
@@ -208,7 +208,12 @@ class AVCFile:
             # Read txt file
             with open(self.input_file, 'r') as txt:
                 self.txt_lines = txt.readlines()
-                self.txt_lines = wrap_text(self.txt_lines, self.text_width)
+                new_txt_lines = []
+                for line in self.txt_lines:
+                    wrapped_txt = wrap_txt_file_line(line, self.text_width)
+                    new_txt_lines.extend(wrapped_txt)  # Use extend to add all wrapped lines
+                self.txt_lines = new_txt_lines
+                
         
         elif self.input_file.lower().endswith('.docx'):
             self.txt_lines = convert_docx_to_lines(self.input_file, self.text_width)

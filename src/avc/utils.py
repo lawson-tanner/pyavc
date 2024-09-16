@@ -1,5 +1,38 @@
 import struct, time, uuid
 
+def wrap_txt_file_line(line, line_width=80):
+    """
+    Wraps a single line of text to the specified line width.
+
+    Parameters:
+    - line (str): The line of text to wrap.
+    - line_width (int): The maximum width of each line.
+
+    Returns:
+    - list of str: A list of wrapped lines.
+    """
+    wrapped_lines = []
+    current_line = ""
+
+    for word in line.split():
+        # Determine if adding the next word exceeds the line width
+        if len(current_line) + len(word) + (1 if current_line else 0) <= line_width:
+            if current_line:
+                current_line += " "
+            current_line += word
+        else:
+            # Line is full, add it to the list and start a new line
+            wrapped_lines.append(current_line)
+            current_line = word
+
+    # Add the last line if it exists
+    if current_line:
+        wrapped_lines.append(current_line)
+    elif not wrapped_lines:
+        # Handle the case where the line is empty or contains only whitespace
+        wrapped_lines.append('')
+
+    return wrapped_lines
 
 def generate_truncated_uuidv7():
     
