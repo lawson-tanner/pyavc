@@ -27,7 +27,7 @@ from avc.core import convert
 The main (and only) method provided is `convert`. It allows you to convert a DOCX or TXT file and save the result to a specified output directory.
 
 ```python
-convert(filepath, output_dir, output_name=None)
+convert(filepath, output_dir, output_name=None, text_width=80)
 ```
 
 #### Parameters
@@ -35,6 +35,7 @@ convert(filepath, output_dir, output_name=None)
 - **`filepath`** (`os.Path`): The path to the input DOCX or TXT file.
 - **`output_dir`** (`os.Path`): The path to the output directory where the converted file will be saved.
 - **`output_name`** (`str`, optional): The name of the output file (without extension). If not provided, the output file will be named based on the input file name. Whether this argument is provided or not, `pyavc` will never overwrite existing files, but will append consecutive numbers to the end of the file name.
+- **`text_width`** (`int`, optional): The maximum length, in characters, before a line break is inserted. By default, it is set to 80 characters. This is done to avoid the classic issue of entire paragraphs being read as a single line.
 
 #### Example Usage
 
@@ -55,7 +56,7 @@ convert('/path/to/input.docx', '/path/to/output/dir', output_name='custom_name')
 #### Syntax
 
 ```bash
-pyavc -i <path-to-input-file> -o <path-to-output-dir> [-n <output-name>]
+pyavc -i <path-to-input-file> -o <path-to-output-dir> [-n <output-name>] [-t <text-width>]
 ```
 
 #### Parameters
@@ -63,6 +64,7 @@ pyavc -i <path-to-input-file> -o <path-to-output-dir> [-n <output-name>]
 - **`-i, --input`**: Path to the input DOCX or TXT file.
 - **`-o, --output_dir`**: Path to the output directory where the converted file will be saved.
 - **`-n, --output_name`**: (Optional) Name of the output file (without extension). If not provided, the output file will be named based on the input file name.
+- **`text_width`** (`int`, optional): The maximum length, in characters, before a line break is inserted. By default, it is set to 80 characters. 
 
 #### Example Commands
 
@@ -72,6 +74,9 @@ pyavc -i /path/to/input.txt -o /path/to/output/dir
 
 # Convert a DOCX file and specify a custom output name
 pyavc -i /path/to/input.docx -o /path/to/output/dir -n custom_name
+
+# Convert a DOCX file and specify a custom output name plus custom text width
+pyavc -i /path/to/input.docx -o /path/to/output/dir -n custom_name -t text-width
 ```
 
 ## License
@@ -85,8 +90,6 @@ Contributions are welcome! Please open an issue or submit a pull request with an
 ## Some Notes
 
 This library is still in the 'finishing touches' phase, and as always, there may be undiscovered bugs. 
-
-Due to differences in formatting between DOCX and TXT files, if you decide to convert to TXT manually, care needs to be taken to ensure line breaks are added in order for Avid not to read entire paragraphs as single lines.  If in doubt, supply the Word file directly and allow the library to do this for you. If you encounter any issues with converting from Word files, and you have a couple of minutes to spare, please log an issue. 
 
 ## Acknowledgments
 
