@@ -205,8 +205,8 @@ class AVCFile:
         
     def create(self):
         if self.input_file.lower().endswith('.txt'):
-            # Read txt file
-            with open(self.input_file, 'r') as txt:
+            # Read txt file - must be UTF-8
+            with open(self.input_file, 'r', encoding='utf-8-sig') as txt:
                 self.txt_lines = txt.readlines()
                 new_txt_lines = []
                 for line in self.txt_lines:
