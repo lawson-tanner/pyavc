@@ -32,7 +32,7 @@ convert(filepath, output_dir, output_name=None, text_width=80)
 
 #### Parameters
 
-- **`filepath`** (`os.Path`): The path to the input DOCX or TXT file.
+- **`filepath`** (`os.Path`): The path to the input DOCX or TXT file. If using a TXT file, it must be encoded as UTF-8.
 - **`output_dir`** (`os.Path`): The path to the output directory where the converted file will be saved.
 - **`output_name`** (`str`, optional): The name of the output file (without extension). If not provided, the output file will be named based on the input file name. Whether this argument is provided or not, `pyavc` will never overwrite existing files, but will append consecutive numbers to the end of the file name.
 - **`text_width`** (`int`, optional): The maximum length, in characters, before a line break is inserted. By default, it is set to 80 characters. This is done to avoid the classic issue of entire paragraphs being read as a single line.
