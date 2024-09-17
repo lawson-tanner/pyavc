@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="pyavc",
-    version="1.0.18",
+    version="1.0.19",
     author="Lawson Tanner",
     author_email="pyavc@lawsonia.cc",
     description="A command line utility and library for converting DOCX and TXT files to Avid Script Files (.avc)",
