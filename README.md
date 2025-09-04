@@ -65,7 +65,8 @@ pyavc -i <path-to-input-file> -o <path-to-output-dir> [-n <output-name>] [-t <te
 - **`-i, --input`**: Path to the input DOCX or TXT file.
 - **`-o, --output_dir`**: Path to the output directory where the converted file will be saved.
 - **`-n, --output_name`**: (Optional) Name of the output file (without extension). If not provided, the output file will be named based on the input file name.
-- **`text_width`** (`int`, optional): The maximum length, in characters, before a line break is inserted. By default, it is set to 80 characters. 
+- **`-t, text_width`** (`int`, optional): The maximum length, in characters, before a line break is inserted. By default, it is set to 80 characters. 
+- **`-f, font_size`** (`int`, optional): Desired display font size, in pixels. Maximum text size is 255 (not that I imagine you'll need more, but it definitely won't work if you try to make it bigger.)
 
 #### Example Commands
 
@@ -76,8 +77,8 @@ pyavc -i /path/to/input.txt -o /path/to/output/dir
 # Convert a DOCX file and specify a custom output name
 pyavc -i /path/to/input.docx -o /path/to/output/dir -n custom_name
 
-# Convert a DOCX file and specify a custom output name plus custom text width and font size
-pyavc -i /path/to/input.docx -o /path/to/output/dir -n custom_name -t text-width -f font-size
+# Convert a DOCX file and specify MyCustomName as the output name, plus 50 char text width and font size of 35
+pyavc -i /path/to/input.docx -o /path/to/output/dir -n MyCustomName -t 50 -f 35
 ```
 
 ## License
