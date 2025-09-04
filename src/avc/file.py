@@ -70,7 +70,7 @@ class AVCHeader:
         
 
 class BTXTChunk:
-    def __init__(self, uuid, txt_lines):
+    def __init__(self, uuid, txt_lines, font_size):
         self.txt_lines = txt_lines
         self.class_id = u'BTXT'
 
@@ -80,7 +80,7 @@ class BTXTChunk:
         self.uuid = uuid
         self.footer1 = footer1
         self.footer2 = footer2
-
+        self.font_size = font_size
 
         
     def create(self):
@@ -162,6 +162,11 @@ class BTXTChunk:
         
         # Add bs3
         data += conform_byte_string(bs3)
+
+        # trimming 4 bytes off the end of bs3 - conform byte string with hex(font_size), 3
+        font_size_byte = int.to_bytes(self.font_size)
+
+        data += conform_byte_string(font_size_byte, 3)
         
         # Add footer1
         data += conform_byte_string(footer1)
@@ -191,7 +196,7 @@ class BTXTChunk:
 
 
 class AVCFile:
-    def __init__(self, input_path, output_dir, output_file_name=None, text_width=80):
+    def __init__(self, input_path, output_dir, output_file_name=None, text_width=80, font_size=12):
         self.name = output_file_name
         self.output_dir = output_dir
         self.full_path = None
@@ -201,6 +206,7 @@ class AVCFile:
         self.uuid = generate_truncated_uuidv7()
         self.header = None
         self.btxt_chunk = None
+        self.font_size = font_size
 
         
     def create(self):
@@ -260,7 +266,7 @@ class AVCFile:
         self.header = AVCHeader(self.uuid)
         header_data = self.header.create()
         # Generate BTXT chunk
-        self.btxt_chunk = BTXTChunk(self.uuid, self.txt_lines)
+        self.btxt_chunk = BTXTChunk(self.uuid, self.txt_lines, self.font_size)
         btxt_data = self.btxt_chunk.create()
         
         output = header_data + btxt_data

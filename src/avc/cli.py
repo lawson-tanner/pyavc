@@ -80,6 +80,7 @@ def main():
     parser.add_argument('-o', '--output_dir', required=True, help="Path to the output directory.")
     parser.add_argument('-n', '--output_name', help="Str: Optional name for the output file (without extension).")
     parser.add_argument('-t', '--text_width', help="Int: Optional max chars before line break is inserted")
+    parser.add_argument('-f', '--font_size', help="Int: Optional font size.")
     # Parse the arguments
     args = parser.parse_args()
 
@@ -88,7 +89,8 @@ def main():
         
         output_name = args.output_name if args.output_name else None
         text_width = args.text_width if args.text_width else 80
-        avc_file = AVCFile(input_path, output_dir, output_name, text_width)
+        font_size = args.font_size if args.font_size else 12
+        avc_file = AVCFile(input_path, output_dir, output_name, text_width, font_size)
         output_path = avc_file.create()
         
         #print(f"Successfully processed '{input_path}' to '{output_path}'.")
