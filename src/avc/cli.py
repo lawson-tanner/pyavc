@@ -81,6 +81,18 @@ def main():
     parser.add_argument('-n', '--output_name', help="Str: Optional name for the output file (without extension).")
     parser.add_argument('-t', '--text_width', help="Int: Optional max chars before line break is inserted")
     parser.add_argument('-f', '--font_size', help="Int: Optional font size.")
+    parser.add_argument('-fn', '--font_name', help="Str: Optional font name")
+    parser.add_argument('-wbg', '--white_bg', help="Bool: Optionally use white background if True or use system settings if False")
+    parser.add_argument('-r', '--show_row_colors', help="Bool: Show alternating colors demarcating rows")
+    parser.add_argument('-ml', '--margin_left', help="Int: Optional left margin, in pixels.")
+    parser.add_argument('-tpx', '--text_width_px', help="Int: Optional text width, in px. This differs from the -text_width argument in that it only affects display and will not add LR/CF.")
+    parser.add_argument('-sf', '--show_frames', help="Bool: Display mini thumbnail on slate.")
+    parser.add_argument('-ip', '--interpolate_position', help="Bool: Optional: Allow manual sync marks")
+    parser.add_argument('-a', '--show_all_takes', help="Bool: Optionally show all takes.")
+    parser.add_argument('-ln', '--show_line_numbers', help="Bool: Optionally show line numbers on the left side.")
+    parser.add_argument('-ww', '--word_wrap', help="Bool: Optionally wrap lines (visually only) where they extend past the established margins")
+    parser.add_argument('-hs', '--hold_slates_onscreen', help="Bool: Optionally display slate info in the record monitor")
+    parser.add_argument('-tk', '--take_color', help="Int: Optionally specify take color as a number between 1 and 22 (see README for the color palette)")
     # Parse the arguments
     args = parser.parse_args()
 
@@ -90,7 +102,19 @@ def main():
         output_name = args.output_name if args.output_name else None
         text_width = args.text_width if args.text_width else 80
         font_size = args.font_size if args.font_size else 12
-        avc_file = AVCFile(input_path, output_dir, output_name, text_width, font_size)
+        font_name = args.font_name if args.font_name else "Open Sans"
+        white_bg = args.white_bg if args.white_bg != None else False
+        show_row_colors = args.show_row_colors if args.show_row_colors != None else True
+        margin_left = args.margin_left if args.margin_left else 40
+        text_width_px = args.text_width_px if args.text_width_px else 512
+        show_frames = args.show_frames if args.show_frames else True
+        interpolate_position = args.interpolate_position if args.interpolate_position != None else False
+        show_all_takes = args.show_all_takes if args.show_all_takes != None else True
+        show_line_numbers = args.show_line_numbers if args.show_line_numbers != None else True
+        word_wrap = args.word_wrap if args.word_wrap != None else True
+        hold_slates_onscreen = args.hold_slates_onscreen if args.hold_slates_onscreen != None else False
+        take_color = args.take_color if args.take_color else 1
+        avc_file = AVCFile(input_path, output_dir, output_name, text_width, font_size, font_name, white_bg, show_row_colors, margin_left, text_width_px, show_frames, interpolate_position, show_all_takes, show_line_numbers, word_wrap, hold_slates_onscreen, take_color)
         output_path = avc_file.create()
         
         #print(f"Successfully processed '{input_path}' to '{output_path}'.")

@@ -4,6 +4,11 @@ from datetime import datetime
 from .bytestrings import footer1, footer2, placeholder, byte_order_indicator, identifier1, identifier2, identifier3, creator_description_len_marker, bs1, bs2, bs3, bs4
 from .docx_utils import convert_docx_to_lines
 
+class AVCException(Exception):
+        def __init__(self, message="An unexpected error occurred."):
+            self.message = message
+            super().__init__(self.message)
+        
 class AVCHeader:
     def __init__(self, uuid):
         self.byte_order_indicator = byte_order_indicator
@@ -69,8 +74,8 @@ class AVCHeader:
         
         
 
-class BTXTChunk:
-    def __init__(self, uuid, txt_lines, font_size):
+class BTXTChunk():
+    def __init__(self, uuid, txt_lines, font_size: int, font_name: str, script_bg_interface_or_white: bool, show_row_colors: bool, left_margin: int, text_width_px: int, show_frames: bool, interpolate_position: bool, show_all_takes: bool, show_line_numbers: bool, word_wrap: bool, hold_slates_onscreen: bool, take_color: int):
         self.txt_lines = txt_lines
         self.class_id = u'BTXT'
 
@@ -81,6 +86,30 @@ class BTXTChunk:
         self.footer1 = footer1
         self.footer2 = footer2
         self.font_size = font_size
+        self.font_name = font_name.strip().encode('ascii')
+        self.use_white_bg = script_bg_interface_or_white.to_bytes(1)
+        if script_bg_interface_or_white:
+            show_row_colors = False
+        self.show_row_colors = show_row_colors.to_bytes(1)
+        self.left_margin = left_margin.to_bytes(4, byteorder='little')
+        self.word_wrap = word_wrap.to_bytes(1)
+        
+        if not word_wrap:
+            text_width_px = False
+       
+        if text_width_px and not text_width_px >= 128:
+            raise AVCException("Insufficient text width value: must be minimum of 128 pixels.")
+        if text_width_px and not text_width_px <= 5120:
+            raise AVCException("Exceeded maximum permissible text width of 5120px.")
+        
+
+        self.text_width_px = text_width_px.to_bytes(2, byteorder="little")
+        self.show_frames = show_frames.to_bytes(1)
+        self.interpolate_position = interpolate_position.to_bytes(1)
+        self.show_all_takes = show_all_takes.to_bytes(1)
+        self.show_line_numbers = show_line_numbers.to_bytes(1)
+        self.hold_slates_onscreen = hold_slates_onscreen.to_bytes(1)
+        self.take_color = take_color.to_bytes(1)
 
         
     def create(self):
@@ -164,9 +193,9 @@ class BTXTChunk:
         data += conform_byte_string(bs3)
 
         # trimming 4 bytes off the end of bs3 - conform byte string with hex(font_size), 3
-        font_size_byte = int.to_bytes(self.font_size)
+        font_size_byte = self.font_size.to_bytes(4, byteorder="little")
 
-        data += conform_byte_string(font_size_byte, 3)
+        data += font_size_byte
         
         # Add footer1
         data += conform_byte_string(footer1)
@@ -177,8 +206,56 @@ class BTXTChunk:
         # Add UUID
         data += conform_byte_string(self.uuid, 8)
         # Add footer2
-        data += conform_byte_string(footer2)
-        
+        #data += conform_byte_string(footer2)
+
+        data += self.take_color
+
+        data += b'\x00'
+
+        data += self.show_all_takes
+
+        data += self.left_margin
+
+        data += b"\x01\x01\x42"
+
+        data += self.interpolate_position
+
+        data += b"\x01\x02\x42"
+
+        data += self.hold_slates_onscreen
+
+        data += b"\x01\x03\x47"
+
+        data += self.text_width_px
+
+        data += b"\x00\x00\x01\x04\x42"
+
+        data += self.word_wrap
+
+        data += b"\x01\x05\x42"
+
+        data += self.show_frames
+
+        data += b"\x42"
+
+        data += self.use_white_bg
+
+        data += b"\x42"
+
+        data += self.show_row_colors
+
+        data += b"\x42"
+
+        data += self.show_line_numbers
+
+        data += b"\x01\x06\x4C"
+
+        data += len(self.font_name).to_bytes(2, byteorder="little")
+
+        data += self.font_name
+
+        data += b"\x03"
+
         # End count of NUM CHAR C
         num_char_c_end = len(data)
         
@@ -196,7 +273,27 @@ class BTXTChunk:
 
 
 class AVCFile:
-    def __init__(self, input_path, output_dir, output_file_name=None, text_width=80, font_size=12):
+
+    def __init__(
+            self, 
+            input_path, 
+            output_dir, 
+            output_file_name: str = None, 
+            text_width: int = 80, 
+            font_size: int = 12, 
+            font_name: str = "Open Sans", 
+            white_bg: bool = False, 
+            show_row_colors: bool = True, 
+            left_margin: int = 40, 
+            text_width_px: int = 512,
+            show_frames: bool = True, 
+            interpolate_position: bool = False, 
+            show_all_takes: bool = True, 
+            show_line_numbers: bool = True, 
+            word_wrap: bool = True, 
+            hold_slates_onscreen: bool = False, 
+            take_color: int = 1):
+        
         self.name = output_file_name
         self.output_dir = output_dir
         self.full_path = None
@@ -207,6 +304,18 @@ class AVCFile:
         self.header = None
         self.btxt_chunk = None
         self.font_size = font_size
+        self.font_name = font_name
+        self.white_bg = white_bg
+        self.show_row_colors = show_row_colors
+        self.left_margin = left_margin
+        self.text_width_px = text_width_px
+        self.show_frames = show_frames
+        self.interpolate_position = interpolate_position
+        self.show_all_takes = show_all_takes
+        self.show_line_numbers = show_line_numbers
+        self.word_wrap = word_wrap
+        self.hold_slates_onscreen = hold_slates_onscreen
+        self.take_color = take_color
 
         
     def create(self):
@@ -266,7 +375,7 @@ class AVCFile:
         self.header = AVCHeader(self.uuid)
         header_data = self.header.create()
         # Generate BTXT chunk
-        self.btxt_chunk = BTXTChunk(self.uuid, self.txt_lines, self.font_size)
+        self.btxt_chunk = BTXTChunk(self.uuid, self.txt_lines, self.font_size, self.font_name, self.white_bg, self.show_row_colors, self.left_margin, self.text_width_px, self.show_frames, self.interpolate_position, self.show_all_takes, self.show_line_numbers, self.word_wrap, self.hold_slates_onscreen, self.take_color)
         btxt_data = self.btxt_chunk.create()
         
         output = header_data + btxt_data
