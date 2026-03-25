@@ -90,9 +90,9 @@ class BTXTChunk():
         self.use_white_bg = script_bg_interface_or_white.to_bytes(1)
         if script_bg_interface_or_white:
             show_row_colors = False
-        self.show_row_colors = show_row_colors.to_bytes(1)
+        self.show_row_colors = show_row_colors.to_bytes(1, byteorder='little')
         self.left_margin = left_margin.to_bytes(4, byteorder='little')
-        self.word_wrap = word_wrap.to_bytes(1)
+        self.word_wrap = word_wrap.to_bytes(1, byteorder='little')
         
         if not word_wrap:
             text_width_px = False
@@ -104,12 +104,12 @@ class BTXTChunk():
         
 
         self.text_width_px = text_width_px.to_bytes(2, byteorder="little")
-        self.show_frames = show_frames.to_bytes(1)
-        self.interpolate_position = interpolate_position.to_bytes(1)
-        self.show_all_takes = show_all_takes.to_bytes(1)
-        self.show_line_numbers = show_line_numbers.to_bytes(1)
-        self.hold_slates_onscreen = hold_slates_onscreen.to_bytes(1)
-        self.take_color = take_color.to_bytes(1)
+        self.show_frames = show_frames.to_bytes(1, byteorder='little')
+        self.interpolate_position = interpolate_position.to_bytes(1, byteorder='little')
+        self.show_all_takes = show_all_takes.to_bytes(1, byteorder='little')
+        self.show_line_numbers = show_line_numbers.to_bytes(1, byteorder='little')
+        self.hold_slates_onscreen = hold_slates_onscreen.to_bytes(1, byteorder='little')
+        self.take_color = take_color.to_bytes(1, byteorder='little')
 
         
     def create(self):
