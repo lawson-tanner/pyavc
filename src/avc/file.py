@@ -87,7 +87,7 @@ class BTXTChunk():
         self.footer2 = footer2
         self.font_size = font_size
         self.font_name = font_name.strip().encode('ascii')
-        self.use_white_bg = script_bg_interface_or_white.to_bytes(1)
+        self.use_white_bg = script_bg_interface_or_white.to_bytes(1, byteorder='little')
         if script_bg_interface_or_white:
             show_row_colors = False
         self.show_row_colors = show_row_colors.to_bytes(1, byteorder='little')
